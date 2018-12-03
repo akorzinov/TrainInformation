@@ -12,10 +12,19 @@
 </h:head>
 
 <h:body>
-    <p:panel id="panel">
-        <h:form id="formButton">
-            <p:commandButton value="find" action="#{scoreboardController.find}" update="panel"/>
-        </h:form>
+    <p:panel id="panel" header="">
+        <p:outputLabel value="Train information" style="position: absolute; left: 600px; top: 17px; font-size: x-large"/>
+        <h:panelGrid id="panelGrid" columns="4" cellpadding="5">
+            <p:outputLabel for="station" value="Station: "/>
+            <p:selectOneMenu id="station" value="#{scoreboardController.station}">
+                <p:ajax partialSubmit="true" listener="#{scoreboardController.onChangeStation}" update="panel"/>
+                <f:selectItems value="#{scoreboardController.listStations}"/>
+            </p:selectOneMenu>
+            <p:outputLabel for="date" value="Date: "/>
+            <h:outputText id="date" value="#{scoreboardController.currentDate}">
+                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
+            </h:outputText>
+        </h:panelGrid>
         <h:form id="formTable">
             <p:dataTable id="trainTable" value="#{scoreboardController.listTrains}" var="tr">
                 <p:column headerText="Train name">

@@ -40,7 +40,7 @@ public class ApplicationContext {
         return new Jackson2JsonMessageConverter();
     }
 
-    @Bean
+//    @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
         template.setRoutingKey(QUEUE_NAME);
@@ -59,7 +59,7 @@ public class ApplicationContext {
 //        return listenerContainer;
 //    }
 
-    @Bean
+//    @Bean
     SimpleRabbitListenerContainerFactory factory() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setMessageConverter(messageConverter());

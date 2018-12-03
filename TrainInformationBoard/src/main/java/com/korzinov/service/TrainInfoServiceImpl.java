@@ -11,6 +11,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -19,11 +20,12 @@ public class TrainInfoServiceImpl implements TrainInfoService {
     static final Logger logger = LogManager.getLogger(TrainInfoServiceImpl.class);
 
     @Override
-    public List<TrainInfoModel> listTrains() {
+    public List<TrainInfoModel> listTrains(String station, Date date) {
         List<TrainInfoModel> listTrains = new ArrayList<>();
+        String pathDate = String.valueOf(date.getTime());
         try {
             Client client = ClientBuilder.newClient();
-            WebTarget webTarget = client.target("http://localhost:8080/rest").path("trains");
+            WebTarget webTarget = client.target("http://localhost:8080/rest").path("trains").path(station).path(pathDate);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
             TrainInfoModel[] trains = invocationBuilder.get().readEntity(TrainInfoModel[].class);
             listTrains = Arrays.asList(trains);
@@ -34,5 +36,23 @@ public class TrainInfoServiceImpl implements TrainInfoService {
             e.printStackTrace();
         }
         return listTrains;
+    }
+
+    @Override
+    public List<String> listStations() {
+        List<String> listStations = new ArrayList<>();
+        try {
+            Client client = ClientBuilder.newClient();
+            WebTarget webTarget = client.target("http://localhost:8080/rest").path("trains").path("stations");
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+            String[] stations = invocationBuilder.get().readEntity(String[].class);
+            listStations = Arrays.asList(stations);
+            for (String st : listStations) {
+                logger.info("Stations: " + st);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listStations;
     }
 }

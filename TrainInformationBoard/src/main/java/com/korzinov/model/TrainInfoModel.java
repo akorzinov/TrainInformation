@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class TrainInfoModel {
 
+    private int ScheduleId;
     private String trainName;
     private String stationDep;
     private String stationDest;
@@ -13,7 +14,8 @@ public class TrainInfoModel {
     public TrainInfoModel() {
     }
 
-    public TrainInfoModel(String trainName, String stationDep, String stationDest, Date arrivalTime, Date departureTime) {
+    public TrainInfoModel(int scheduleId, String trainName, String stationDep, String stationDest, Date arrivalTime, Date departureTime) {
+        ScheduleId = scheduleId;
         this.trainName = trainName;
         this.stationDep = stationDep;
         this.stationDest = stationDest;
@@ -61,10 +63,19 @@ public class TrainInfoModel {
         this.departureTime = departureTime;
     }
 
+    public int getScheduleId() {
+        return ScheduleId;
+    }
+
+    public void setScheduleId(int scheduleId) {
+        ScheduleId = scheduleId;
+    }
+
     @Override
     public String toString() {
         return "TrainInfoModel{" +
-                "trainName='" + trainName + '\'' +
+                "ScheduleId=" + ScheduleId +
+                ", trainName='" + trainName + '\'' +
                 ", stationDep='" + stationDep + '\'' +
                 ", stationDest='" + stationDest + '\'' +
                 ", arrivalTime=" + arrivalTime +
