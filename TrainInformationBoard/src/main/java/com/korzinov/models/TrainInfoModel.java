@@ -30,17 +30,6 @@ public class TrainInfoModel {
         this.stationName = stationName;
     }
 
-    public void handleMessage(TrainInfoModel message) {
-        this.scheduleId = message.getScheduleId();
-        this.trainName = message.getTrainName();
-        this.stationDep = message.getStationDep();
-        this.stationDest = message.getStationDest();
-        this.arrivalTime = message.getArrivalTime();
-        this.departureTime = message.getDepartureTime();
-        this.status = message.getStatus();
-        this.stationName = message.getStationName();
-    }
-
     public String getTrainName() {
         return trainName;
     }

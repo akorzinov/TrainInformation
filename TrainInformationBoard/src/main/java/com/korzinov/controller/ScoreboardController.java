@@ -2,17 +2,27 @@ package com.korzinov.controller;
 
 import com.korzinov.models.TrainInfoModel;
 import com.korzinov.service.TrainInfoService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 @Named(value = "scoreboardController")
 @Controller
-public class ScoreboardController {
+@EnableRabbit
+@SessionScoped
+public class ScoreboardController implements Serializable {
+
+    static final Logger logger = LogManager.getLogger(ScoreboardController.class);
 
     @Autowired
     private TrainInfoService trainInfoService;
@@ -23,18 +33,22 @@ public class ScoreboardController {
     private Date currentDate;
 
     @PostConstruct
-    public void initListTrains() {
+    public void init() {
+        listStations = trainInfoService.listStations();
+        if (!listStations.isEmpty()) {
+            station = listStations.get(listStations.size()-1);
+        }
         Date date = java.sql.Date.valueOf(LocalDate.now());
                     /*stub*/
-        date = new Date(date.getTime()+3*24*60*60*1000);
+        date = new Date(date.getTime()+24*60*60*1000);
         currentDate = date;
-        listTrains = trainInfoService.listTrains("Voronezh", currentDate);
+        listTrains = trainInfoService.listTrains(station, currentDate);
     }
 
-    @PostConstruct
-    public void initListStations() {
-        listStations = trainInfoService.listStations();
-        station = listStations.get(0);
+    @RabbitListener(queues = "Notification", containerFactory = "factory")
+    public void receive(TrainInfoModel message) {
+        logger.info("Received message: " + message);
+        listTrains = trainInfoService.updateListTrainsFromMQ(listTrains, message);
     }
 
     public void onChangeStation() {
@@ -80,4 +94,5 @@ public class ScoreboardController {
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
     }
+
 }

@@ -11,7 +11,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     static final Logger logger = LogManager.getLogger(ConsumerServiceImpl.class);
 
-    @RabbitListener(queues = "Notification", containerFactory = "factory")
+//    @RabbitListener(queues = "Notification", containerFactory = "factory")
     @Override
     public void receive(TrainInfoModel message) {
         System.out.println("Received message: " + message);

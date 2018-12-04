@@ -10,4 +10,6 @@ public interface TrainInfoService {
     List<TrainInfoModel> listTrains(String station, Date date);
 
     List<String> listStations();
+
+    List<TrainInfoModel> updateListTrainsFromMQ(List<TrainInfoModel> listTrains, TrainInfoModel message);
 }

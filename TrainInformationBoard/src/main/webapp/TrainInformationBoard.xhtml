@@ -26,6 +26,7 @@
             </h:outputText>
         </h:panelGrid>
         <h:form id="formTable">
+            <p:poll interval="5" update="panel"/>
             <p:dataTable id="trainTable" value="#{scoreboardController.listTrains}" var="tr">
                 <p:column headerText="Train name">
                     <h:outputText value="#{tr.trainName}"/>

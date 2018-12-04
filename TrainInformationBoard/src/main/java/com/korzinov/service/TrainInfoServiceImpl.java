@@ -3,6 +3,8 @@ package com.korzinov.service;
 import com.korzinov.models.TrainInfoModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.primefaces.PrimeFaces;
+import org.primefaces.context.RequestContext;
 import org.springframework.stereotype.Service;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -54,5 +56,16 @@ public class TrainInfoServiceImpl implements TrainInfoService {
             e.printStackTrace();
         }
         return listStations;
+    }
+
+    @Override
+    public List<TrainInfoModel> updateListTrainsFromMQ(List<TrainInfoModel> listTrains, TrainInfoModel message) {
+        for (int i = 0; i < listTrains.size(); i++) {
+            if (listTrains.get(i).getScheduleId() == message.getScheduleId() &&
+                    listTrains.get(i).getStationName().equals(message.getStationName())) {
+                listTrains.set(i, message);
+            }
+        }
+        return listTrains;
     }
 }

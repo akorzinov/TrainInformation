@@ -53,6 +53,12 @@
       <artifactId>spring-tx</artifactId>
       <version>5.1.0.RELEASE</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-messaging -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-messaging</artifactId>
+      <version>5.1.0.RELEASE</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.glassfish/javax.faces -->
     <dependency>
       <groupId>org.glassfish</groupId>

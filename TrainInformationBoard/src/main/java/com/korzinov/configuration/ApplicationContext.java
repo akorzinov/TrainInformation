@@ -2,8 +2,12 @@ package com.korzinov.configuration;
 
 import com.korzinov.models.TrainInfoModel;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.listener.MessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.listener.RabbitListenerEndpoint;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.DefaultClassMapper;
@@ -12,6 +16,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.HashMap;
@@ -57,17 +62,10 @@ public class ApplicationContext {
     }
 
     @Bean
-    public SimpleMessageListenerContainer listenerContainer(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(QUEUE_NAME);
-        container.setMessageListener(listenerAdapter);
-        return container;
+    public RabbitListenerContainerFactory factory() {
+            SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+            factory.setMessageConverter(messageConverter());
+            factory.setConnectionFactory(connectionFactory());
+            return factory;
     }
-
-    @Bean
-    public MessageListenerAdapter listenerAdapter(TrainInfoModel message, MessageConverter messageConverter) {
-        return new MessageListenerAdapter(message, messageConverter);
-    }
-
 }
