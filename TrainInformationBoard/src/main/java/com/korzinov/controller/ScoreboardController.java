@@ -1,11 +1,10 @@
 package com.korzinov.controller;
 
-import com.korzinov.model.TrainInfoModel;
+import com.korzinov.models.TrainInfoModel;
 import com.korzinov.service.TrainInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javax.annotation.PostConstruct;
-import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import java.time.LocalDate;
 import java.util.Date;

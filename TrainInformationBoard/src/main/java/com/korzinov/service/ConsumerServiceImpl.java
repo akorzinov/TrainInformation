@@ -1,6 +1,6 @@
 package com.korzinov.service;
 
-import com.korzinov.model.MessageFromMQModel;
+import com.korzinov.models.TrainInfoModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -13,7 +13,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @RabbitListener(queues = "Notification", containerFactory = "factory")
     @Override
-    public void Receive(MessageFromMQModel message) {
+    public void receive(TrainInfoModel message) {
         System.out.println("Received message: " + message);
         logger.info("Received message: " + message);
     }

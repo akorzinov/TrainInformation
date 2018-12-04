@@ -1,6 +1,6 @@
 package com.korzinov.service;
 
-import com.korzinov.model.TrainInfoModel;
+import com.korzinov.models.TrainInfoModel;
 
 import java.util.Date;
 import java.util.List;

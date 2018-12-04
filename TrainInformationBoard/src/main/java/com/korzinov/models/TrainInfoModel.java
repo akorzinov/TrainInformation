@@ -1,26 +1,44 @@
-package com.korzinov.model;
+package com.korzinov.models;
+
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class TrainInfoModel {
 
-    private int ScheduleId;
+    private int scheduleId;
     private String trainName;
     private String stationDep;
     private String stationDest;
     private Date arrivalTime;
     private Date departureTime;
+    private String status;
+    private String stationName;
 
     public TrainInfoModel() {
     }
 
-    public TrainInfoModel(int scheduleId, String trainName, String stationDep, String stationDest, Date arrivalTime, Date departureTime) {
-        ScheduleId = scheduleId;
+    public TrainInfoModel(int scheduleId, String trainName, String stationDep, String stationDest, Date arrivalTime, Date departureTime, String status, String stationName) {
+        this.scheduleId = scheduleId;
         this.trainName = trainName;
         this.stationDep = stationDep;
         this.stationDest = stationDest;
         this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
+        this.status = status;
+        this.stationName = stationName;
+    }
+
+    public void handleMessage(TrainInfoModel message) {
+        this.scheduleId = message.getScheduleId();
+        this.trainName = message.getTrainName();
+        this.stationDep = message.getStationDep();
+        this.stationDest = message.getStationDest();
+        this.arrivalTime = message.getArrivalTime();
+        this.departureTime = message.getDepartureTime();
+        this.status = message.getStatus();
+        this.stationName = message.getStationName();
     }
 
     public String getTrainName() {
@@ -64,22 +82,40 @@ public class TrainInfoModel {
     }
 
     public int getScheduleId() {
-        return ScheduleId;
+        return scheduleId;
     }
 
     public void setScheduleId(int scheduleId) {
-        ScheduleId = scheduleId;
+        this.scheduleId = scheduleId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
     }
 
     @Override
     public String toString() {
         return "TrainInfoModel{" +
-                "ScheduleId=" + ScheduleId +
+                "scheduleId=" + scheduleId +
                 ", trainName='" + trainName + '\'' +
                 ", stationDep='" + stationDep + '\'' +
                 ", stationDest='" + stationDest + '\'' +
                 ", arrivalTime=" + arrivalTime +
                 ", departureTime=" + departureTime +
+                ", status='" + status + '\'' +
+                ", stationName='" + stationName + '\'' +
                 '}';
     }
 }

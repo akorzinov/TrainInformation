@@ -46,6 +46,9 @@
                         <f:convertDateTime dateStyle="short" timeStyle="short" pattern="HH:mm" timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>
+                <p:column headerText="Status">
+                    <h:outputText value="#{tr.status}"/>
+                </p:column>
             </p:dataTable>
         </h:form>
     </p:panel>

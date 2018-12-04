@@ -1,26 +1,28 @@
 package com.korzinov.configuration;
 
-import org.springframework.amqp.core.AcknowledgeMode;
+import com.korzinov.models.TrainInfoModel;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.amqp.support.converter.DefaultClassMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = "com.korzinov")
 public class ApplicationContext {
 
-    private final static String QUEUE_NAME = "Notification";
+    static final String QUEUE_NAME = "Notification";
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -37,34 +39,35 @@ public class ApplicationContext {
 
     @Bean
     public MessageConverter messageConverter() {
-        return new Jackson2JsonMessageConverter();
+        Jackson2JsonMessageConverter messageConverter = new Jackson2JsonMessageConverter();
+        messageConverter.getJavaTypeMapper().addTrustedPackages("*");
+        messageConverter.setClassMapper(classMapper());
+        return messageConverter;
     }
 
-//    @Bean
-    public RabbitTemplate rabbitTemplate() {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory());
-        template.setRoutingKey(QUEUE_NAME);
-        template.setMessageConverter(messageConverter());
-        return template;
+    @Bean
+    public DefaultClassMapper classMapper() {
+        DefaultClassMapper classMapper = new DefaultClassMapper();
+        classMapper.setTrustedPackages("*");
+        Map<String, Class<?>> idClassMapping = new HashMap<>();
+        idClassMapping.put("com.korzinov.models.TrainInfoModel", TrainInfoModel.class);
+        classMapper.setIdClassMapping(idClassMapping);
+
+        return classMapper;
     }
 
-//    @Bean
-//    public SimpleMessageListenerContainer listenerContainer() {
-//        SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
-//        listenerContainer.setConnectionFactory(connectionFactory());
-//        listenerContainer.setQueues(queue());
-//        listenerContainer.setMessageConverter(messageConverter());
-//        listenerContainer.setMessageListener(new Consumer());
-//        listenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
-//        return listenerContainer;
-//    }
-
-//    @Bean
-    SimpleRabbitListenerContainerFactory factory() {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setMessageConverter(messageConverter());
-        factory.setConnectionFactory(connectionFactory());
-        factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
-        return factory;
+    @Bean
+    public SimpleMessageListenerContainer listenerContainer(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.setQueueNames(QUEUE_NAME);
+        container.setMessageListener(listenerAdapter);
+        return container;
     }
+
+    @Bean
+    public MessageListenerAdapter listenerAdapter(TrainInfoModel message, MessageConverter messageConverter) {
+        return new MessageListenerAdapter(message, messageConverter);
+    }
+
 }

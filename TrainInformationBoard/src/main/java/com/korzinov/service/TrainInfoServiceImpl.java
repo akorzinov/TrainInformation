@@ -1,6 +1,6 @@
 package com.korzinov.service;
 
-import com.korzinov.model.TrainInfoModel;
+import com.korzinov.models.TrainInfoModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 package com.korzinov.service;
 
-import com.korzinov.model.MessageFromMQModel;
+import com.korzinov.models.TrainInfoModel;
 
 public interface ConsumerService {
 
-    void Receive(MessageFromMQModel message);
+    void receive(TrainInfoModel message);
 }
