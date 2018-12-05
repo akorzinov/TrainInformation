@@ -10,7 +10,16 @@
 <h:head>
     <title>Train Information</title>
 </h:head>
-
+<style type="text/css">
+    .colorRed {
+        background-color: red;
+        color: white;
+    }
+    .colorYellow {
+        background-color: yellow;
+        color: black;
+    }
+</style>
 <h:body>
     <p:panel id="panel" header="">
         <p:outputLabel value="Train information" style="position: absolute; left: 600px; top: 17px; font-size: x-large"/>
@@ -26,8 +35,10 @@
             </h:outputText>
         </h:panelGrid>
         <h:form id="formTable">
-            <p:poll interval="5" update="panel"/>
-            <p:dataTable id="trainTable" value="#{scoreboardController.listTrains}" var="tr">
+            <p:poll interval="5" update="formTable"/>
+            <p:dataTable id="trainTable" value="#{scoreboardController.listTrains}" var="tr"
+                         rowStyleClass="#{tr.status eq 'Late' ? 'colorYellow' :
+                         (tr.status eq 'Canceled' ? 'colorRed' : 'null')}">
                 <p:column headerText="Train name">
                     <h:outputText value="#{tr.trainName}"/>
                 </p:column>
@@ -38,12 +49,12 @@
                     <h:outputText value="#{tr.stationDest}"/>
                 </p:column>
                 <p:column headerText="Arrival time">
-                    <h:outputText value="#{tr.arrivalTime}">
+                    <h:outputText value="#{tr.arrivalTime}" rendered="#{tr.status ne 'Canceled'}">
                         <f:convertDateTime dateStyle="short" timeStyle="short" pattern="HH:mm" timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Departure time">
-                    <h:outputText value="#{tr.departureTime}">
+                    <h:outputText value="#{tr.departureTime}" rendered="#{tr.status ne 'Canceled'}">
                         <f:convertDateTime dateStyle="short" timeStyle="short" pattern="HH:mm" timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>

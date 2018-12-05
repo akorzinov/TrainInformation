@@ -36,7 +36,7 @@ public class ScoreboardController implements Serializable {
     public void init() {
         listStations = trainInfoService.listStations();
         if (!listStations.isEmpty()) {
-            station = listStations.get(listStations.size()-1);
+            station = listStations.get(0);
         }
         Date date = java.sql.Date.valueOf(LocalDate.now());
                     /*stub*/
@@ -52,7 +52,7 @@ public class ScoreboardController implements Serializable {
     }
 
     public void onChangeStation() {
-        listTrains = trainInfoService.listTrains(getStation(), currentDate);
+        listTrains = trainInfoService.listTrains(station, currentDate);
     }
 
     public List<TrainInfoModel> getListTrains() {
