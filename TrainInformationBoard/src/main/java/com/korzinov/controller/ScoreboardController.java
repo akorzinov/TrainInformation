@@ -40,7 +40,7 @@ public class ScoreboardController implements Serializable {
         }
         Date date = java.sql.Date.valueOf(LocalDate.now());
                     /*stub*/
-        date = new Date(date.getTime()+24*60*60*1000);
+//        date = new Date(date.getTime()+24*60*60*1000);
         currentDate = date;
         listTrains = trainInfoService.listTrains(station, currentDate);
     }
@@ -53,6 +53,7 @@ public class ScoreboardController implements Serializable {
 
     public void onChangeStation() {
         listTrains = trainInfoService.listTrains(station, currentDate);
+        listStations = trainInfoService.listStations();
     }
 
     public List<TrainInfoModel> getListTrains() {
