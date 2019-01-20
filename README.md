@@ -1,2 +1,2 @@
 # TrainInformation
-Second part of java school project SBB
+Second part of java school project
